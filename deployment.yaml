@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sshd-jumphost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sshd-jumphost
+  template:
+    metadata:
+      labels:
+        app: sshd-jumphost
+    spec:
+      containers:
+      - name: sshd-jumphost
+        image: nickvanrompuy/sshd-jumphost:latest
+        ports:
+        - containerPort: 22
+        volumeMounts:
+        - name: ssh-key-volume
+          mountPath: /etc/secrets
+        env:
+        - name: SSH_USER_HOME
+          value: "/path/to/your/custom/home"
+      volumes:
+      - name: ssh-key-volume
+        secret:
+          secretName: ssh-key-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sshd-jumphost
+spec:
+  selector:
+    app: sshd-jumphost
+  ports:
+    - protocol: TCP
+      port: 22
+      targetPort: 22
+  type: NodePort
