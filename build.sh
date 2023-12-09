@@ -1,8 +1,8 @@
 #!/bin/bash
 # Manual convenient script to build the image
 
-DOCKERHUB_USER="nickvanrompuy"
-DOCKERHUB_REPO="ridethenet-container-repo"
+DOCKERHUB_USER="nick0tin"
+DOCKERHUB_REPO="jumphost-ridethenet"
 
 # Build the tag version string
 DATE=`date +%Y.%m`
@@ -20,4 +20,4 @@ docker build --tag=$DOCKERHUB_USER/$DOCKERHUB_REPO:latest \
 
 
 
-# sudo docker push nickvanrompuy/ridethenet-container-repo:sshd-jumphost
+# sudo docker push nick0tin/jumphost-ridethenet
