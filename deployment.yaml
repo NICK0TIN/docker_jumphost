@@ -14,20 +14,24 @@ spec:
     spec:
       containers:
       - name: sshd-jumphost
-        image: nickvanrompuy/sshd-jumphost:latest
+        image: nick0tin/jumphost-ridethenet:latest
         ports:
         - containerPort: 22
         volumeMounts:
-            - mountPath: "/var/my-app"
+            - mountPath: "/etc/.secrets"
               name: ssh-key-jumphost
               readOnly: true
-      env:
-        - name: SSH_USER_HOME
-          value: "/path/to/your/custom/home"
+        env:
+        - name: SSH_USER
+          value: "ssh-agent"
+        - name: SSH_PRIVATE_KEY_FILE
+          value: "/etc/.secrets/ssh-key-jumphost"
       volumes:
         - name: ssh-key-jumphost
           secret:
             secretName: jumphost-private-key
+      imagePullSecrets:
+        - name: registrykey-dockerhub-nick0tin    
 
 ---
 apiVersion: v1
