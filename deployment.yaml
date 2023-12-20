@@ -18,15 +18,17 @@ spec:
         ports:
         - containerPort: 22
         volumeMounts:
-        - name: ssh-key-volume
-          mountPath: /etc/secrets
-        env:
+            - mountPath: "/var/my-app"
+              name: ssh-key-jumphost
+              readOnly: true
+      env:
         - name: SSH_USER_HOME
           value: "/path/to/your/custom/home"
       volumes:
-      - name: ssh-key-volume
-        secret:
-          secretName: ssh-key-secret
+        - name: ssh-key-jumphost
+          secret:
+            secretName: jumphost-private-key
+
 ---
 apiVersion: v1
 kind: Service
