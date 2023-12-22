@@ -23,7 +23,7 @@ if [ -f "$SSH_USER_PRIVATE_KEY" ] ; then
   # Create user with password
   adduser -D -h "$SSH_USER_HOME" -s /bin/bash -G $SSH_USER -u 1000 $SSH_USER --disabled-password
   chown -R $SSH_USER:$SSH_USER "$SSH_USER_HOME/.ssh"
-else; then
+else
   echo "Could not find File SSH_USER_PRIVATE_KEY: $SSH_USER_PRIVATE_KEY"
   exit 2 
 
