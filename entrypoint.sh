@@ -1,36 +1,36 @@
 #!/bin/bash
 
-# Generate SSH host keys if they do not exist
-#
+
+SSH_USER=${SSH_USER:-default_user}
+
+#!/bin/bash
+SSH_USER_HOME="/home/$SSH_USER"
+SSH_USER_PUBLIC_KEY="$SSH_USER_HOME/.ssh/id_rsa.pub"
+SSH_USER_PRIVATE_KEY="$SSH_USER_HOME/.ssh/id_rsa"
+#echo $ONLY_ACCEPT_KEY
 
 
 
-# SSH_USER_HOME="/home/$SSH_USER"
-# SSH_USER_AUTHORIZED_KEYS="$SSH_USER_HOME/.ssh/authorized_keys"
-# SSH_USER_PUBLIC_KEY="$SSH_USER_HOME/.ssh/id_rsa.pub"
-#SSH_USER_PRIVATE_KEY="/etc/.secrets/ssh-key-jumphost"
-SSH_USER_PRIVATE_KEY=$SSH_PRIVATE_KEY_FILE
-echo "hello world!"
-# Check if custom SSH key and password are provided
-if [ -f "$SSH_USER_PRIVATE_KEY" ] ; then
-  mkdir -p "$SSH_USER_HOME/.ssh"
-  
-  # Add SSH key to authorized keys
-  #cp /etc/.secrets/ssh-public-key "$SSH_USER_PUBLIC_KEY"
-  #cp /etc/.secrets/authorized_keys "$SSH_USER_AUTHORIZED_KEYS"
-  #chmod -R 600  "$SSH_USER_PRIVATE_KEY" 
-
-  # Create user with password
-  adduser -D -h "$SSH_USER_HOME" -s /bin/bash -G $SSH_USER -u 1000 $SSH_USER --disabled-password
-  chown -R $SSH_USER:$SSH_USER "$SSH_USER_HOME/.ssh"
-else
-  echo "Could not find File SSH_USER_PRIVATE_KEY: $SSH_USER_PRIVATE_KEY"
-  exit 2 
-
+if [ $ONLY_ACCEPT_KEY ]; then
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+    #sed -i 's,#HostKey /etc/ssh/ssh_host_rsa_key,#HostKey /etc/.secrets/ssh-key-jumphost ,' /etc/ssh/sshd_config && \ to add: var that chooses key file location
+    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+    #mkdir /etc/.secrets
 fi
 
-# Start the SSH server
-/usr/sbin/sshd -D
+mkdir -p $SSH_USER_HOME/.ssh
 
 
 
+ if [ ! -f $SSH_USER_PRIVATE_KEY ]; then
+    echo "it runs"
+    touch $SSH_USER_PRIVATE_KEY
+    ssh-keygen -q -t rsa -N '' -f $SSH_USER_PRIVATE_KEY <<<y >/dev/null 2>&1 # if not mounted via volume or secret 
+  fi
+    adduser -h "/home/${SSH_USER}" "${SSH_USER}"
+    passwd -d $SSH_USER
+    chown -R $SSH_USER:$SSH_USER $SSH_USER_HOME
+    chmod -R 700 $SSH_USER_HOME/.ssh/
+    chmod 600 $SSH_USER_PRIVATE_KEY
+/usr/sbin/sshd -D -e

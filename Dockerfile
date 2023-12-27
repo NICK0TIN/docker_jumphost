@@ -2,30 +2,36 @@
 FROM alpine:latest
 
 
-RUN apk add --no-cache openssh-server
+RUN apk add --no-cache openssh-server bash openssh-client
 
 
-ENV SSH_USER=sshuser
-
-
+#ENV SSH_USER=sshuser
+#RUN adduser -D -h "/home/${SSH_USER}" "${SSH_USER}"
 
 #ARG SSH_PASSWORD
 #ARG SSH_PRIVATE_KEY
-#ARG SSH_PUBLIC_KEY
-ARG SSH_PRIVATE_KEY_FILE
-ARG SSH_USER
+# ENV SSH_PUBLIC_KEY test
+# ENV SSH_PRIVATE_KEY_FILE test
+ENV ONLY_ACCEPT_KEY=1
+
+
+
+# COPY conditional_config.sh /tmp/
+# RUN     chmod +x /tmp/conditional_config.sh
+# RUN     /tmp/conditional_config.sh
+# RUN     rm -f /tmp/conditional_config.sh
+
+#RUN chmod 600 /home/${SSH_USER}/.ssh/id_rsa
+
+
+# Keys to start SSHD daemon
+RUN ssh-keygen -A        
+# Keys to start SSHD daemon
 # Voeg de SSHD-configuratie toe
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config && \
-    sed -i 's,#HostKey /etc/ssh/ssh_host_rsa_key,#HostKey /etc/.secrets/ssh-key-jumphost ,' /etc/ssh/sshd_config && \
-    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config && \
-    mkdir /etc/.secrets
-    
-
 EXPOSE 22
-
 COPY entrypoint.sh /usr/local/bin/
-RUN /bin/bash -c '/usr/local/bin/entrypoint.sh'
+ENTRYPOINT /usr/local/bin/entrypoint.sh
+
 
 
 
