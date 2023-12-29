@@ -1,9 +1,9 @@
 # jump_host_container
-Repository Description:
+
 
 This Docker image is built on Alpine and is designed to set up a minimalistic SSH environment, providing both an SSH server and client. The image is configured to allow only key-based logins.
 
-Features:
+# Features:
 
    - Based on Alpine Linux for a lightweight footprint.
    - Installs OpenSSH server and client components.
@@ -14,7 +14,7 @@ Features:
     Examples for usage are provided for reference.
    - motd banner can be created as environment variable
 
-Important Notes:
+# Important Notes:
 
    - Specifiy an SSH_USER as environment variable
    - To enable key-based authentication, mount a '.ssh' folder with the necessary keys. (see blow)
@@ -23,9 +23,9 @@ Important Notes:
    - Non-root execution of SSHD is not possible in modern versions.
 
 
-required preparation:
+# Required preparation:
 
-Persistent user SSH keys
+# Persistent user SSH keys
 
 You need to generate user authentication keys for your SSH_USER and mount them afterwards.
 
@@ -48,16 +48,16 @@ these host keys are cryptographic keys used to verify the authenticity of the SS
 
 
 
-Usage:
+# Usage:
 complete example with mount and environment variable:
 
- c
+ 
 
       nick@system76:~$ ssh nick@localhost -p 8080
       Welcome to SSHD on Alpine!
       d9536ab16dd2:~$ 
 
-Run image and  specify a banner as variable:
+# Run image and  specify a banner as variable:
 
      docker run  -v  $(pwd)/dot_ssh:/home/nick/.ssh -v $(pwd)/hostkeys:/etc/container_hostkey -e SSH_USER=nick -p 8080:22 nick0tin/jumphost-ridethenet
 
@@ -65,14 +65,11 @@ Run image and  specify a banner as variable:
      Hi, welcome to this demo!
      c1980b4d4cb4:~$ 
 
-Content of dot_ssh config file:
 
-     nick@system76:~/Documents/docker_jumphost$ sudo ls  dot_ssh/
-     authorized_keys  id_rsa  id_rsa.pub  known_hosts
 
 You can also mount your own sshd_config to modify the image or put more files in your .'ssh folder'
 
-directory example
+# directory example
 
 ├── dot_ssh
 
