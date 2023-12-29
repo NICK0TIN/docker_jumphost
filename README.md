@@ -69,7 +69,7 @@ complete example with mount and environment variable:
 
 You can also mount your own sshd_config to modify the image or put more files in your .'ssh folder'
 
-# directory example
+# Directory example
 
 ├── dot_ssh
 
