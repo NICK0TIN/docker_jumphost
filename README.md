@@ -83,7 +83,7 @@ You can also mount your own sshd_config to modify the image or put more files in
 
 │   └── known_hosts
 
-├── hostkeys
+├── hostkey
 
 │   ├── ssh_host_rsa_key
 
