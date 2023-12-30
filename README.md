@@ -43,7 +43,7 @@ You need to generate a unique hostkey and mount that as a volume for the SSHD da
 Generate the hostkeys in a local folder, and mount it afterwards. Be sure to protect these keys very well on your host system!
 these host keys are cryptographic keys used to verify the authenticity of the SSH server to clients during the initial connection.
 
-      mkdir hostkeys
+      mkdir hostkey
       ssh-keygen -q -N "" -t rsa -b 4096 -f hostkeys/ssh_host_rsa_key
 
 
@@ -52,8 +52,8 @@ these host keys are cryptographic keys used to verify the authenticity of the SS
 
 # Usage:
 complete example with mount and environment variable:
-
- 
+      
+      docker run  -v  $(pwd)/dot_ssh:/home/nick/.ssh -v $(pwd)/hostkey:/etc/container_hostkey -e SSH_USER=nick -p 8080:22 nick0tin/jumphost-ridethenet
 
       nick@system76:~$ ssh nick@localhost -p 8080
       Welcome to SSHD on Alpine!
@@ -61,9 +61,9 @@ complete example with mount and environment variable:
 
 # Run image and  specify a banner as variable:
 
-     docker run  -v  $(pwd)/dot_ssh:/home/nick/.ssh -v $(pwd)/hostkeys:/etc/container_hostkey -e SSH_USER=nick -p 8080:22 nick0tin/jumphost-ridethenet
-
-     nick@system76:~$ ssh default_user@localhost -p 8080
+     
+     docker run  -v  $(pwd)/dot_ssh:/home/nick/.ssh -v $(pwd)/hostkey:/etc/container_hostkey -e SSH_USER=nick -e MOTD_MESSSAGE="Hi, welcome to this demo!" -p 8080:22 nick0tin/jumphost-ridethenet
+     nick@system76:~$ ssh nick@localhost -p 8080
      Hi, welcome to this demo!
      c1980b4d4cb4:~$ 
 
