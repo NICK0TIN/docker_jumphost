@@ -38,7 +38,7 @@ Be sure to protect these keys very well on your host system!
       mkdir dot_ssh
       ssh-keygen -t rsa -f dot_ssh/
 
-You need to generate a unique hostkey and mount that as a volume for the SSHD daemon. If not you clients will not trust the hostkey anymore each time the container.
+You need to generate a unique hostkey and mount that as a volume for the SSHD daemon. If not you clients will not trust the hostkey anymore each time the containerrestarts.
 
 Generate the hostkeys in a local folder, and mount it afterwards. Be sure to protect these keys very well on your host system!
 these host keys are cryptographic keys used to verify the authenticity of the SSH server to clients during the initial connection.
