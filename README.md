@@ -65,6 +65,7 @@ If you don't have an SSH RSA keypair for your PC and user yet, create one and ad
       +----[SHA256]-----+
 
 Finally add the public key you just generated to the containers 'authorized_keys'
+
       cat /home/my_user/.ssh/id_rsa.pub >>  $(pwd)/dot_ssh/authorized_keys
 
 
