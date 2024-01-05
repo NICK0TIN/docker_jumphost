@@ -46,6 +46,29 @@ these host keys are cryptographic keys used to verify the authenticity of the SS
       mkdir hostkey
       ssh-keygen -q -N "" -t rsa -b 4096 -f hostkeys/ssh_host_rsa_key
 
+If you don't have an SSH RSA keypair for your PC and user yet, create one and add it the containers 'authorized_keys'
+      
+      
+      my_user@mypc:~$ ssh-keygen
+      Generating public/private rsa key pair.
+      Enter file in which to save the key (/home/my_user/.ssh/id_rsa):
+      Created directory '/home/my_user/.ssh'.
+      Enter passphrase (empty for no passphrase):
+      Enter same passphrase again:
+      Your identification has been saved in /home/my_user/.ssh/id_rsa
+      Your public key has been saved in /home/my_user/.ssh/id_rsa.pub
+      The key fingerprint is:
+      SHA256:[fingerprint]
+      The key's randomart image is:
+      +---[RSA 3072]----+
+      [a randomart image]
+      +----[SHA256]-----+
+
+Finally add the public key you just generated to the containers 'authorized_keys'
+      cat /home/my_user/.ssh/id_rsa.pub >>  $(pwd)/dot_ssh/authorized_keys
+
+
+ 
 
 
 
